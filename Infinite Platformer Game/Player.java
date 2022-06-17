@@ -4,8 +4,10 @@ import javax.swing.ImageIcon;
 
 //x:x-coordinate, dx:difference in x-coordinate, y:y-coordinate, nx2:new x-coordinate 2, nx:new x-coordinate, left:x-coordinate for moving left, dy:Difference in y-value
 public class Player {
-    int x, dx, y, nx2, nx, left, dy, elevation;
+    int x, dx, y, nx2, nx, left, dy, elevation, jumpStrength;
     Image Character;
+    boolean jumpStart = false;
+    boolean falling = true;
 
     //Adding the character models
     ImageIcon rightCharacter = new ImageIcon("Character.png");
@@ -16,11 +18,12 @@ public class Player {
         Character = rightCharacter.getImage();
         left = 150;
 
-        x = 75;
+        x = 575;
         nx2 = 1150; //x-value a little smaller than frame length 
         nx = 0;//variable used to create infinite looping backround
         y = 450;
         elevation = 450;
+        jumpStrength = 20;
     }
     //method for calculating the movement of character
     public void move(){
@@ -39,17 +42,6 @@ public class Player {
                 left = left + dx;//Going left
             }
         }
-    }
-
-    boolean jumpPeak = false;
-    boolean jumpDone = false;
-    boolean jumpStart = false;
-    
-    public void jump(int dy){
-        if (dy != 10){
-            y = y + dy;
-            System.out.println("This is y:" + y);
-        }    
     }
 
     public int getX(){
@@ -78,9 +70,10 @@ public class Player {
         }
 
         if (key == KeyEvent.VK_UP){
-            dy = -10;
+            dy = -5; //Going up the screen is negative
             Character = upCharacter.getImage();
-            jump(dy);
+            jumpStart = true;
+            falling = false;
         }
     }
 
@@ -101,7 +94,7 @@ public class Player {
         }
     }
 
-
+    //Past jumping method attempts
     /* 
     public void jump(int dy){
         boolean jumpPeak = false;

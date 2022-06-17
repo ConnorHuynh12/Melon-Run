@@ -14,7 +14,7 @@ public class Game extends JPanel implements ActionListener{
         p = new Player();
         addKeyListener(new AL());
         setFocusable(true);
-        ImageIcon backround = new ImageIcon("gameBackround.png");
+        ImageIcon backround = new ImageIcon("FarmGameBackround.png");
         img = backround.getImage();
         time = new Timer(5, this);
         time.start();
@@ -24,6 +24,23 @@ public class Game extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e){
         p.move();
         repaint();
+
+        //GRAVITY AND JUMPING NOT WORKING. DOES NOT ALLOW FOR DECREASE OF JUMPSTRENGTH FROM A FLOAT ONLY INT
+
+        //Gravity component
+        double gravity = 0.9;
+        if (p.falling){  //when boolean falling is true
+            p.y += gravity;
+            System.out.println("Gravity is occuring y:" + p.y);
+        }
+
+        //Jumping component
+        if (p.jumpStart){
+            System.out.println("This is y:" + p.y);
+            p.y -= p.jumpStrength;
+            p.jumpStrength -= gravity;
+            System.out.println("This is jump strength "+ p.jumpStrength);
+        }
     }
 
     //Creates the backround and moves the backround and loops it
@@ -51,7 +68,21 @@ public class Game extends JPanel implements ActionListener{
                 g2d.drawImage(img, 1150-p.nx, 0, null);
             }
             g2d.drawImage(p.getImage(), p.left, p.y, null);
-    }
+            
+
+            
+            System.out.println(p.getX());
+
+                /* 
+                for (int i = 0; i < (p.dy*-1); i++ ){
+                    p.y = p.y - i;
+                    //System.out.println("This is y:" + p.y);
+                }
+                System.out.println("This is y:" + p.y);
+                p.falling = true;
+                */
+            }
+    
 
     //Calls the methods for movement
     private class AL extends KeyAdapter{
