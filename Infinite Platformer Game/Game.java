@@ -6,12 +6,17 @@ import javax.swing.*;
 public class Game extends JPanel implements ActionListener{
 
     Player p;
+    Platform surface, surface2;
     public Image img;
     Timer time;
+    int counter = 0;
 
     public Game(){
 
         p = new Player();
+        surface = new Platform(300);
+        surface2 = new Platform(150);
+
         addKeyListener(new AL());
         setFocusable(true);
         ImageIcon backround = new ImageIcon("FarmGameBackround.png");
@@ -22,7 +27,15 @@ public class Game extends JPanel implements ActionListener{
 
 
     public void actionPerformed(ActionEvent e){
+
         p.move();
+
+        if ((p.getX() - 405) % 2400 == 0){
+            p.nx = 0;
+        }
+        if ((p.getX() - 1605) % 2400 == 0){
+            p.nx2 = 0;
+        }
 
 
         //GRAVITY AND JUMPING NOT WORKING. DOES NOT ALLOW FOR DECREASE OF JUMPSTRENGTH FROM A FLOAT ONLY INT
@@ -46,6 +59,10 @@ public class Game extends JPanel implements ActionListener{
             }
             System.out.println("This is jump strength "+ p.jumpStrength);
         }
+
+        surface.behavior(p, 1150 - p.nx);
+        //surface2.behavior(p, 1150 - p.nx + 500);
+        
         repaint();
     }
 
@@ -72,12 +89,14 @@ public class Game extends JPanel implements ActionListener{
             //This is drawing backround for the loop
             if (p.getX() >= 405){
                 g2d.drawImage(img, 1150-p.nx, 0, null);
+                g2d.drawImage(surface.platform, 1150-p.nx, surface.y, null);
+                g2d.drawImage(surface2.platform, 1150-p.nx+500, surface2.y, null);
             }
             g2d.drawImage(p.getImage(), p.left, p.y, null);
             
 
             
-            System.out.println(p.getX());
+            //System.out.println(p.getX());
 
                 /* 
                 for (int i = 0; i < (p.dy*-1); i++ ){

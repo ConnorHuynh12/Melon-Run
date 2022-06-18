@@ -7,7 +7,8 @@ public class Player {
     int x, dx, y, nx2, nx, left, dy, elevation, jumpStrength;
     Image Character;
     boolean jumpStart = false;
-    boolean falling = true;
+    boolean falling = false;
+    boolean onPlatform;
 
     //Adding the character models
     ImageIcon rightCharacter = new ImageIcon("Character.png");
@@ -23,7 +24,7 @@ public class Player {
         nx = 0;//variable used to create infinite looping backround
         y = 450;
         elevation = 450;
-        jumpStrength = 20;
+        jumpStrength = 30;
     }
     //method for calculating the movement of character
     public void move(){
@@ -73,7 +74,6 @@ public class Player {
             dy = -5; //Going up the screen is negative
             Character = upCharacter.getImage();
             jumpStart = true;
-            falling = false;
         }
     }
 
