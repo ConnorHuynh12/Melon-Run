@@ -28,7 +28,7 @@ public class Game extends JPanel implements ActionListener{
         //GRAVITY AND JUMPING NOT WORKING. DOES NOT ALLOW FOR DECREASE OF JUMPSTRENGTH FROM A FLOAT ONLY INT
 
         //Gravity component
-        double gravity = 0.9;
+        float gravity = 1f;
         if (p.falling){  //when boolean falling is true
             p.y += gravity;
             System.out.println("Gravity is occuring y:" + p.y);
