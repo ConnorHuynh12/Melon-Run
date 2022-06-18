@@ -16,14 +16,14 @@ public class Game extends JPanel implements ActionListener{
         setFocusable(true);
         ImageIcon backround = new ImageIcon("FarmGameBackround.png");
         img = backround.getImage();
-        time = new Timer(5, this);
+        time = new Timer(10, this);
         time.start();
     }
 
 
     public void actionPerformed(ActionEvent e){
         p.move();
-        repaint();
+
 
         //GRAVITY AND JUMPING NOT WORKING. DOES NOT ALLOW FOR DECREASE OF JUMPSTRENGTH FROM A FLOAT ONLY INT
 
@@ -37,10 +37,16 @@ public class Game extends JPanel implements ActionListener{
         //Jumping component
         if (p.jumpStart){
             System.out.println("This is y:" + p.y);
-            p.y -= p.jumpStrength;
+            p.y -= p.jumpStrength/2.0;
             p.jumpStrength -= gravity;
+            if (p.y - p.jumpStrength >= 450){
+                p.jumpStrength = 30;
+                p.y = 450;
+                p.jumpStart = false;
+            }
             System.out.println("This is jump strength "+ p.jumpStrength);
         }
+        repaint();
     }
 
     //Creates the backround and moves the backround and loops it
