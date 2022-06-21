@@ -6,7 +6,7 @@ import javax.swing.*;
 public class Game extends JPanel implements ActionListener{
 
     Player p;
-    Platform surface, surface2;
+    Platform surface, surface2, surface3, surface4, surfaceStart;
     public Image img;
     Timer time;
     int counter = 0;
@@ -14,8 +14,11 @@ public class Game extends JPanel implements ActionListener{
     public Game(){
 
         p = new Player();
-        surface = new Platform(300);
+        //surfaceStart = new Platform(210);
+        surface = new Platform(350);
         surface2 = new Platform(150);
+        surface3 = new Platform(400);
+        surface4 = new Platform(300);
 
         addKeyListener(new AL());
         setFocusable(true);
@@ -25,51 +28,44 @@ public class Game extends JPanel implements ActionListener{
         time.start();
     }
 
-
     public void actionPerformed(ActionEvent e){
 
         p.move();
+        //surfaceStart.behavior(p, 1150 - p.nx2 +100);
+        surface.behavior(p,1150 - p.nx);
+        surface2.behavior(p,1150 - p.nx + 500);
+        surface3.behavior(p,1150 - p.nx + 900);
+        surface4.behavior(p,1150 - p.nx2 + 550);
 
-        if ((p.getX() - 405) % 2400 == 0){
+        if ((p.getX() - 405) % 2400 == 0){ //Checks that the backround is complete, 405-405%2400 is 0 
             p.nx = 0;
         }
         if ((p.getX() - 1605) % 2400 == 0){
             p.nx2 = 0;
         }
 
-
-        //GRAVITY AND JUMPING NOT WORKING. DOES NOT ALLOW FOR DECREASE OF JUMPSTRENGTH FROM A FLOAT ONLY INT
-
-        //Gravity component
-        float gravity = 1f;
-        if (p.falling){  //when boolean falling is true
-            p.y += gravity;
-            System.out.println("Gravity is occuring y:" + p.y);
-        }
-
         //Jumping component
         if (p.jumpStart){
             System.out.println("This is y:" + p.y);
             p.y -= p.jumpStrength/2.0;
-            p.jumpStrength -= gravity;
-            if (p.y - p.jumpStrength >= 450){
+            p.jumpStrength -= 1.0; //1.0 is the gravity that y decreases
+            //
+            if (p.y - p.jumpStrength >= 450 || p.y - p.jumpStrength >= surface.y && surface.onPlatform || p.y - p.jumpStrength >= surface2.y && surface2.onPlatform || p.y - p.jumpStrength >= surface3.y && surface3.onPlatform || p.y - p.jumpStrength >= surface4.y && surface4.onPlatform /*|| p.y - p.jumpStrength >= surfaceStart.y*/){
                 p.jumpStrength = 30;
                 p.y = 450;
                 p.jumpStart = false;
+                p.falling = false;
             }
             System.out.println("This is jump strength "+ p.jumpStrength);
-        }
-
-        surface.behavior(p, 1150 - p.nx);
-        //surface2.behavior(p, 1150 - p.nx + 500);
-        
+        }    
         repaint();
     }
 
     //Creates the backround and moves the backround and loops it
     public void paint(Graphics g){
         super.paint(g);
-
+            Graphics2D g2d = (Graphics2D) g;
+            /* 
             Graphics2D g2d = (Graphics2D) g;
             if ((p.getX() - 405) %  2400 == 0){//Checks that the backround is complete, 405-405%2400 is 0 
                 p.nx = 0;
@@ -77,39 +73,30 @@ public class Game extends JPanel implements ActionListener{
             if ((p.getX() - 1605) % 2400 == 0){
                 p.nx2 = 0;
             }
+            */
+
             //x-coordinate 405 marks end of backround
             //1605 is 405 + length of frame(1200). used to start second backround image.
             //2400 is frame x 2
-
-            //testing x value
-            //System.out.println(p.getX());
             //negative so backround scrolls left, 1150 is end of backroud so that frame moves slightly ahead
             //This is drawing backround for the first scroll of backround
             g2d.drawImage(img, 1150-p.nx2, 0, null);
             //This is drawing backround for the loop
             if (p.getX() >= 405){
-                g2d.drawImage(img, 1150-p.nx, 0, null);
-                g2d.drawImage(surface.platform, 1150-p.nx, surface.y, null);
-                g2d.drawImage(surface2.platform, 1150-p.nx+500, surface2.y, null);
+                g2d.drawImage(img, 1150-p.nx, 0, null); //Draws backround constanly at changing x values
+                
+                //Platform drawing
+                //g2d.drawImage(Platform.platform, 1150-p.nx2+100, surfaceStart.y,null);
+                g2d.drawImage(Platform.platform, 1150-p.nx, surface.y, null); //Draws the first platform
+                g2d.drawImage(Platform.platform, 1150-p.nx+500, surface2.y, null); //Draws the second platform
+                g2d.drawImage(Platform.platform, 1150-p.nx+900, surface3.y, null);
+                g2d.drawImage(Platform.platform, 1150-p.nx2+550, surface4.y, null);
             }
-            g2d.drawImage(p.getImage(), p.left, p.y, null);
-            
+            g2d.drawImage(p.getImage(), p.left, p.y, null); //This draws the character
 
-            
-            //System.out.println(p.getX());
-
-                /* 
-                for (int i = 0; i < (p.dy*-1); i++ ){
-                    p.y = p.y - i;
-                    //System.out.println("This is y:" + p.y);
-                }
-                System.out.println("This is y:" + p.y);
-                p.falling = true;
-                */
             }
     
 
-    //Calls the methods for movement
     private class AL extends KeyAdapter{
         public void keyReleased(KeyEvent e){
             p.keyReleased(e);

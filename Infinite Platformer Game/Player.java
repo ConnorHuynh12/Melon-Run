@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 
 //x:x-coordinate, dx:difference in x-coordinate, y:y-coordinate, nx2:new x-coordinate 2, nx:new x-coordinate, left:x-coordinate for moving left, dy:Difference in y-value
 public class Player {
-    int x, dx, y, nx2, nx, left, dy, elevation, jumpStrength;
+    int x, dx, y, nx2, nx, left, dy, jumpStrength;
     Image Character;
     boolean jumpStart = false;
     boolean falling = false;
@@ -22,8 +22,8 @@ public class Player {
         x = 575;
         nx2 = 1150; //x-value a little smaller than frame length 
         nx = 0;//variable used to create infinite looping backround
-        y = 450;
-        elevation = 450;
+        // y= 450 is the ground
+        y = 450; //change this to match the y value of starting platform
         jumpStrength = 30;
     }
     //method for calculating the movement of character
@@ -93,33 +93,5 @@ public class Player {
             Character = rightCharacter.getImage();
         }
     }
-
-    //Past jumping method attempts
-    /* 
-    public void jump(int dy){
-        boolean jumpPeak = false;
-        boolean jumpDone = false;
-        System.out.println("This is elevation:" + elevation);
-
-        if (jumpPeak == false){//Subtract is going up screen
-                //elevation--;
-                elevation = elevation - 2;
-        }
-        if (elevation == 100){//100 random max value
-                jumpPeak = true;
-        }
-        if (jumpPeak == true && elevation <= 450){ //if you are at peak of jump and above floor (450)
-            //elevation++;//coming back down to ground
-            elevation = elevation + 100;
-            if (elevation == 450){
-                jumpDone = true;
-                    
-                //Testing when jump done
-                System.out.println("JUMP DONE");
-            }
-        }
-    }
-*/
-
 
 }

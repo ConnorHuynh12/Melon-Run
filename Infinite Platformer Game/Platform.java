@@ -1,42 +1,43 @@
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 
 class Platform {
-    int x;
     int y;
-    Image platform;
-    ImageIcon img = new ImageIcon("Platform.png");
+    static ImageIcon img = new ImageIcon("Platform.png");
+    static Image platform = img.getImage();
     int counter = 0;
+
+    Boolean onPlatform = false;
 
     public Platform(int y) {
         this.y = y;
-        platform = img.getImage();
+    }
+
+    public void setY (int y){
+        this.y = y;
     }
 
     public void behavior(Player p, int x) {
-        if(p.y+62 < y && p.left < x+270 && p.left+125 > x) {
-            p.onPlatform = true;
-        } else if(p.left > x+270 || p.left+125 < x) {
-            if (p.onPlatform) {
+        //62 is height of the player greater than platform, x-coordinate of character is less than right of platform, x-coordinate is greater than left of platform  
+        if(p.y+62 < y && p.left < x+270 && p.left+125 > x) { 
+            this.onPlatform = true;
+        } else if(p.left > x+270 || p.left+125 < x) { //left x of character greater than right of platform or right character less than platform
+            if (this.onPlatform && !p.jumpStart) { //
                 p.falling = true;
             }
-            p.onPlatform = false;
+            this.onPlatform = false;
         }
 
-        if (p.onPlatform) {
-            if (p.y - p.jumpStrength >= y) {
+        if (this.onPlatform) {
+            if (p.y - p.jumpStrength > y) {
                 p.jumpStrength = 30;
                 p.y = y-62;
                 p.jumpStart = false;
             }
         } else if (p.falling) {
-            p.jumpStart = false;
-            p.y += counter / 2.0;
-            counter += 1;
-            if (p.y + counter / 2.0 >= 450) {
-                counter = 0; 
-                p.falling = false;
+            p.jumpStart = true;
+            if (p.jumpStrength > 0) {
+                p.jumpStrength = 0;
             }
         }
     }
