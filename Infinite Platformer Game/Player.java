@@ -11,9 +11,9 @@ public class Player {
     boolean onPlatform;
 
     //Adding the character models
-    ImageIcon rightCharacter = new ImageIcon("Character.png");
-    ImageIcon leftCharacter = new ImageIcon("CharacterLeft.png");
-    ImageIcon upCharacter = new ImageIcon("CharacterJump.png");
+    ImageIcon rightCharacter = new ImageIcon("Melon_Character.png");
+    ImageIcon leftCharacter = new ImageIcon("Melon_Left.png");
+    ImageIcon upCharacter = new ImageIcon("Melon_Jump.png");
 
     public Player(){
         Character = rightCharacter.getImage();

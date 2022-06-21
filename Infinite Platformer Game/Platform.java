@@ -3,7 +3,7 @@ import javax.swing.ImageIcon;
 
 class Platform {
     int y;
-    static ImageIcon img = new ImageIcon("Platform.png");
+    static ImageIcon img = new ImageIcon("Earth_Platform.png");
     static Image platform = img.getImage();
     int counter = 0;
 
