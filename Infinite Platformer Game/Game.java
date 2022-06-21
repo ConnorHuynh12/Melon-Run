@@ -14,7 +14,7 @@ public class Game extends JPanel implements ActionListener{
     public Game(){
 
         p = new Player();
-        //surfaceStart = new Platform(210);
+        surfaceStart = new Platform(210);
         surface = new Platform(350);
         surface2 = new Platform(150);
         surface3 = new Platform(400);
@@ -30,8 +30,11 @@ public class Game extends JPanel implements ActionListener{
 
     public void actionPerformed(ActionEvent e){
 
-        p.move();
-        //surfaceStart.behavior(p, 1150 - p.nx2 +100);
+        if (!p.gameOver){
+          p.move();
+        }
+
+        surfaceStart.behavior(p, 1150 - p.nx2 +100);
         surface.behavior(p,1150 - p.nx);
         surface2.behavior(p,1150 - p.nx + 500);
         surface3.behavior(p,1150 - p.nx + 900);
@@ -58,6 +61,15 @@ public class Game extends JPanel implements ActionListener{
             }
             System.out.println("This is jump strength "+ p.jumpStrength);
         }    
+
+        if (p.y < 450){
+            p.gameOver = false;
+        }
+        else if (p.y >= 450){
+            p.gameOver = true;
+        }
+
+
         repaint();
     }
 
@@ -65,15 +77,6 @@ public class Game extends JPanel implements ActionListener{
     public void paint(Graphics g){
         super.paint(g);
             Graphics2D g2d = (Graphics2D) g;
-            /* 
-            Graphics2D g2d = (Graphics2D) g;
-            if ((p.getX() - 405) %  2400 == 0){//Checks that the backround is complete, 405-405%2400 is 0 
-                p.nx = 0;
-            }
-            if ((p.getX() - 1605) % 2400 == 0){
-                p.nx2 = 0;
-            }
-            */
 
             //x-coordinate 405 marks end of backround
             //1605 is 405 + length of frame(1200). used to start second backround image.
@@ -86,15 +89,27 @@ public class Game extends JPanel implements ActionListener{
                 g2d.drawImage(img, 1150-p.nx, 0, null); //Draws backround constanly at changing x values
                 
                 //Platform drawing
-                //g2d.drawImage(Platform.platform, 1150-p.nx2+100, surfaceStart.y,null);
+                g2d.drawImage(Platform.platform, 1150-p.nx2+100, surfaceStart.y,null);
                 g2d.drawImage(Platform.platform, 1150-p.nx, surface.y, null); //Draws the first platform
                 g2d.drawImage(Platform.platform, 1150-p.nx+500, surface2.y, null); //Draws the second platform
                 g2d.drawImage(Platform.platform, 1150-p.nx+900, surface3.y, null);
                 g2d.drawImage(Platform.platform, 1150-p.nx2+550, surface4.y, null);
             }
             g2d.drawImage(p.getImage(), p.left, p.y, null); //This draws the character
+            
+            //Displays the score
+            g2d.setColor(new Color(0,0,0));
+            g2d.setFont(new Font("Roboto", Font.PLAIN, 20));
+            g2d.drawString("SCORE: "+ p.score, 1000, 50);
 
+            //Displays GAME OVER
+            if (p.gameOver){
+                g2d.setColor(new Color(255,0,0));
+                g2d.setFont(new Font("Roboto", Font.BOLD, 100));
+                g2d.drawString("GAME OVER", 300, 250);
+                g2d.drawString("Your score: " + p.score, 260, 400);
             }
+        }
     
 
     private class AL extends KeyAdapter{

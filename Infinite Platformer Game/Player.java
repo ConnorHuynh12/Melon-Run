@@ -4,11 +4,12 @@ import javax.swing.ImageIcon;
 
 //x:x-coordinate, dx:difference in x-coordinate, y:y-coordinate, nx2:new x-coordinate 2, nx:new x-coordinate, left:x-coordinate for moving left, dy:Difference in y-value
 public class Player {
-    int x, dx, y, nx2, nx, left, dy, jumpStrength;
+    int x, dx, y, nx2, nx, left, dy, jumpStrength, score;
     Image Character;
     boolean jumpStart = false;
     boolean falling = false;
     boolean onPlatform;
+    boolean gameOver = false;
 
     //Adding the character models
     ImageIcon rightCharacter = new ImageIcon("Melon_Character.png");
@@ -18,12 +19,12 @@ public class Player {
     public Player(){
         Character = rightCharacter.getImage();
         left = 150;
-
+        score = 0;
         x = 575;
         nx2 = 1150; //x-value a little smaller than frame length 
         nx = 0;//variable used to create infinite looping backround
         // y= 450 is the ground
-        y = 450; //change this to match the y value of starting platform
+        y = 150; //change this to match the y value of starting platform
         jumpStrength = 30;
     }
     //method for calculating the movement of character
@@ -36,11 +37,13 @@ public class Player {
                 x = x + dx;
                 nx2 = nx2 + dx;
                 nx = nx + dx;
+                score++;
             }
         }
         else{//If you are moving left/backwards
             if (left + dx > 0){//Keeps character on screen
                 left = left + dx;//Going left
+                score--;
             }
         }
     }
@@ -60,17 +63,17 @@ public class Player {
     public void keyPressed(KeyEvent e){
         int key = e.getKeyCode(); 
 
-        if (key == KeyEvent.VK_LEFT){
+        if (key == KeyEvent.VK_LEFT && !gameOver){
             dx = -10;
             Character = leftCharacter.getImage();
         }
 
-        if (key == KeyEvent.VK_RIGHT){
+        if (key == KeyEvent.VK_RIGHT && !gameOver){
             dx = 10;
             Character = rightCharacter.getImage();
         }
 
-        if (key == KeyEvent.VK_UP){
+        if (key == KeyEvent.VK_UP && !gameOver){
             dy = -5; //Going up the screen is negative
             Character = upCharacter.getImage();
             jumpStart = true;
