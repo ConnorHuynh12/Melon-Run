@@ -5,18 +5,17 @@ import javax.swing.*;
 
 public class Game extends JPanel implements ActionListener{
 
-    Player p;
-    Platform surface, surface2, surface3, surface4, surfaceStart;
-    public Image img;
+    Player p; //Creating player object
+    Platform surface, surface2, surface3, surface4, surfaceStart; //Creating platform objects
+    Image img;
     Timer time;
-    int counter = 0;
 
     public Game(){
 
-        p = new Player();
-        surfaceStart = new Platform(210);
+        p = new Player(); //Calling constructor for player class to instantiate the object
+        surfaceStart = new Platform(210); //Instantiating platform objects
         surface = new Platform(350);
-        surface2 = new Platform(150);
+        surface2 = new Platform(180);
         surface3 = new Platform(400);
         surface4 = new Platform(300);
 
@@ -24,17 +23,17 @@ public class Game extends JPanel implements ActionListener{
         setFocusable(true);
         ImageIcon backround = new ImageIcon("FarmGameBackround.png");
         img = backround.getImage();
-        time = new Timer(10, this);
+        time = new Timer(10, this); //Changes the speed of repaint
         time.start();
     }
 
     public void actionPerformed(ActionEvent e){
 
-        if (!p.gameOver){
+        if (!p.gameOver){ //Allows movement if game is not over
           p.move();
         }
 
-        surfaceStart.behavior(p, 1150 - p.nx2 +100);
+        surfaceStart.behavior(p, 1150 - p.nx2 +100); //Adding platform collision and movement
         surface.behavior(p,1150 - p.nx);
         surface2.behavior(p,1150 - p.nx + 500);
         surface3.behavior(p,1150 - p.nx + 900);
@@ -46,27 +45,31 @@ public class Game extends JPanel implements ActionListener{
         if ((p.getX() - 1605) % 2400 == 0){
             p.nx2 = 0;
         }
+        //x-coordinate 405 marks end of backround
+        //1605 is 405 + length of frame(1200). used to start second backround image.
+        //2400 is frame x 2
+        //negative so backround scrolls left, 1150 is end of backroud so that frame moves slightly ahead
+        //This is drawing backround for the first scroll of backround
 
         //Jumping component
         if (p.jumpStart){
-            System.out.println("This is y:" + p.y);
             p.y -= p.jumpStrength/2.0;
             p.jumpStrength -= 1.0; //1.0 is the gravity that y decreases
-            //
-            if (p.y - p.jumpStrength >= 450 || p.y - p.jumpStrength >= surface.y && surface.onPlatform || p.y - p.jumpStrength >= surface2.y && surface2.onPlatform || p.y - p.jumpStrength >= surface3.y && surface3.onPlatform || p.y - p.jumpStrength >= surface4.y && surface4.onPlatform /*|| p.y - p.jumpStrength >= surfaceStart.y*/){
+            //If character is on a platform
+            if (p.y - p.jumpStrength >= surface.y && surface.onPlatform || p.y - p.jumpStrength >= surface2.y && surface2.onPlatform || p.y - p.jumpStrength >= surface3.y && surface3.onPlatform || p.y - p.jumpStrength >= surface4.y && surface4.onPlatform){
                 p.jumpStrength = 30;
-                p.y = 450;
                 p.jumpStart = false;
                 p.falling = false;
             }
-            System.out.println("This is jump strength "+ p.jumpStrength);
         }    
 
+        //Ends game 
         if (p.y < 450){
             p.gameOver = false;
         }
         else if (p.y >= 450){
-            p.gameOver = true;
+            p.gameOver = true; //This boolean is used to freeze other parts of the code to end the game and display messages
+            p.y = 450;
         }
 
 
@@ -77,12 +80,6 @@ public class Game extends JPanel implements ActionListener{
     public void paint(Graphics g){
         super.paint(g);
             Graphics2D g2d = (Graphics2D) g;
-
-            //x-coordinate 405 marks end of backround
-            //1605 is 405 + length of frame(1200). used to start second backround image.
-            //2400 is frame x 2
-            //negative so backround scrolls left, 1150 is end of backroud so that frame moves slightly ahead
-            //This is drawing backround for the first scroll of backround
             g2d.drawImage(img, 1150-p.nx2, 0, null);
             //This is drawing backround for the loop
             if (p.getX() >= 405){
@@ -91,11 +88,11 @@ public class Game extends JPanel implements ActionListener{
                 //Platform drawing
                 g2d.drawImage(Platform.platform, 1150-p.nx2+100, surfaceStart.y,null);
                 g2d.drawImage(Platform.platform, 1150-p.nx, surface.y, null); //Draws the first platform
-                g2d.drawImage(Platform.platform, 1150-p.nx+500, surface2.y, null); //Draws the second platform
+                g2d.drawImage(Platform.platform, 1150-p.nx+500, surface2.y, null); 
                 g2d.drawImage(Platform.platform, 1150-p.nx+900, surface3.y, null);
                 g2d.drawImage(Platform.platform, 1150-p.nx2+550, surface4.y, null);
             }
-            g2d.drawImage(p.getImage(), p.left, p.y, null); //This draws the character
+            g2d.drawImage(p.getImage(), p.left, p.y - 50 , null); //This draws the character
             
             //Displays the score
             g2d.setColor(new Color(0,0,0));

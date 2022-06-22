@@ -24,7 +24,7 @@ public class Player {
         nx2 = 1150; //x-value a little smaller than frame length 
         nx = 0;//variable used to create infinite looping backround
         // y= 450 is the ground
-        y = 150; //change this to match the y value of starting platform
+        y = 190; //change this to match the y value of starting platform
         jumpStrength = 30;
     }
     //method for calculating the movement of character
@@ -43,7 +43,6 @@ public class Player {
         else{//If you are moving left/backwards
             if (left + dx > 0){//Keeps character on screen
                 left = left + dx;//Going left
-                score--;
             }
         }
     }
@@ -63,7 +62,7 @@ public class Player {
     public void keyPressed(KeyEvent e){
         int key = e.getKeyCode(); 
 
-        if (key == KeyEvent.VK_LEFT && !gameOver){
+        if (key == KeyEvent.VK_LEFT && !gameOver){ //if you are pressing left key and game is not over
             dx = -10;
             Character = leftCharacter.getImage();
         }
@@ -96,5 +95,4 @@ public class Player {
             Character = rightCharacter.getImage();
         }
     }
-
 }
